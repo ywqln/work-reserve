@@ -19,7 +19,7 @@ public abstract class BaseController {
 
     public abstract void workFlow();
 
-    private String jsonPath = "/Users/yanwenqiang/Desktop/niug.json";
+    private String jsonPath = "resources/static/niug.json";
 
     protected String generateUUID() {
         return UUID.randomUUID().toString().replaceAll("-", StringUtils.EMPTY);
