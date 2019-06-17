@@ -1,0 +1,4 @@
+server:
+  servlet:
+    context-path: /reserve
+  port: 8088

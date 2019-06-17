@@ -1,0 +1,24 @@
+spring:
+  profiles:
+    active: dev
+
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/jdgoods?serverTimezone=CTT
+    username: root
+    password: yanwenqiang
+
+#  jpa:
+#    hibernate:
+#      ddl-auto: update
+#    show-sql: true
+
+  jpa:
+    database: mysql
+    generate-ddl: true
+    hibernate:
+      ddl-auto: update
+      naming:
+        implicit-strategy: org.hibernate.boot.model.naming.ImplicitNamingStrategyLegacyJpaImpl
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+    show-sql: true
