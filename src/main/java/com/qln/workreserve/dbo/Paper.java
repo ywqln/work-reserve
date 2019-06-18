@@ -3,10 +3,7 @@ package com.qln.workreserve.dbo;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 /**
  * 描述：待描述
@@ -25,6 +22,8 @@ public class Paper {
     }
 
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Integer id;
     @Column(name = "achievementId")
     private String achievementId;
 
@@ -47,13 +46,13 @@ public class Paper {
     @Column(name = "correspondingAuthor")
     private String correspondingAuthor;
 
-    @Column(name = "authors")
+    @Column(name = "authors", columnDefinition = "varchar(2000) default 'not null'")
     private String authors;
-    @Column(name = "keywords")
+    @Column(name = "keywords", columnDefinition = "varchar(1000) default 'not null'")
     private String keywords;
     @Column(name = "include")
     private String include;
-    @Column(name = "refs")
+    @Column(name = "refs", columnDefinition = "varchar(2000) default 'not null'")
     private String refer;
     @Column(name = "fundProjec")
     private String fundProject;

@@ -3,10 +3,7 @@ package com.qln.workreserve.dbo;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.util.Date;
 
 @Getter
@@ -16,6 +13,8 @@ import java.util.Date;
 public class Person {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Integer id;
     @Column(name = "personId")
     private String personId;
     @Column(name = "chineseName")

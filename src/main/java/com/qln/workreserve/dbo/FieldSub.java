@@ -3,9 +3,7 @@ package com.qln.workreserve.dbo;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 /**
  * 描述：待描述
@@ -20,6 +18,8 @@ import javax.persistence.Table;
 @Table(name = "hjp_paper_field_sub")
 public class FieldSub {
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Integer id;
     private String fieldSubId;
     private String fieldSubName;
     private String paperId;
