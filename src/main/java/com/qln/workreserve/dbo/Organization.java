@@ -19,6 +19,8 @@ import javax.persistence.*;
 @Table(name = "organization")
 public class Organization {
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Integer id;
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private String orgId;
     private String code;

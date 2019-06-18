@@ -4,14 +4,9 @@ spring:
 
   datasource:
     driver-class-name: com.mysql.jdbc.Driver
-    url: jdbc:mysql://10.0.88.77:3306/qln?serverTimezone=CTT
+    url: jdbc:mysql://localhost:3306/csai?serverTimezone=CTT
     username: root
-    password: 123456
-
-#  jpa:
-#    hibernate:
-#      ddl-auto: update
-#    show-sql: true
+    password: yanwenqiang
 
   jpa:
     database: mysql
@@ -22,5 +17,3 @@ spring:
         implicit-strategy: org.hibernate.boot.model.naming.ImplicitNamingStrategyLegacyJpaImpl
         physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
     show-sql: true
-resources:
-  static: niug
