@@ -1,5 +1,7 @@
 package com.qln.workreserve.elasticsearch;
 
+import org.elasticsearch.action.delete.DeleteRequest;
+import org.elasticsearch.action.delete.DeleteResponse;
 import org.elasticsearch.action.get.GetResponse;
 import org.elasticsearch.action.index.IndexResponse;
 import org.elasticsearch.action.update.UpdateRequest;
@@ -112,5 +114,12 @@ public class ElasticsearchClient {
         UpdateResponse updateResponse = client.update(request).get();
         System.out.println(updateResponse);
     }
-
+    @Test
+    private void deleteESData() throws Exception {
+        TransportClient client = getTransportClient();
+        DeleteRequest request = new DeleteRequest();
+        request.index("blog").type("user").id("47");
+        DeleteResponse deleteResponse = client.delete(request).get();
+        System.out.println(deleteResponse);
+    }
 }
