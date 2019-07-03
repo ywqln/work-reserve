@@ -2,6 +2,7 @@ package com.qln.workreserve.controller;
 
 import com.alibaba.fastjson.JSONObject;
 import com.qln.workreserve.bo.AuthorJson;
+import com.qln.workreserve.bo.KeywordJson;
 import com.qln.workreserve.repository.*;
 import com.qln.workreserve.dbo.*;
 import org.apache.commons.lang3.StringUtils;
@@ -11,7 +12,9 @@ import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @Title: $
@@ -72,117 +75,103 @@ public class PaperController extends BaseController {
             }
         }
 
-//        dealPaper(jsonPapers);
-//        ywqPaper(jsonPapers);
-//        dealPaperAuthor(jsonPapers);
-//        dealPerson(jsonPapers);
+        dealPaper(jsonPapers);
+        ywqPaper(jsonPapers);
+        dealPaperAuthor(jsonPapers);
         dealKeyword(jsonPapers);
-//        dealField(jsonPapers);
-//        dealFieldSub(jsonPapers);
+        dealField(jsonPapers);
+        dealFieldSub(jsonPapers);
 
         int stop = 0;
     }
 
 
-    private void dealPerson(List<Paper> jsonPapers) {
-//        List<List<Person>> listPersons = new ArrayList<>();
-//        for (Paper jsonPaper : jsonPapers) {
-//            jsonPaper.getAuthors().contains()
-//            List<Person> allByChineseName = personRepository.findAByChineseName();
-//            if (allByChineseName.size() > 0) {
-//                listPersons.add(allByChineseName);
-//                continue;
-//            }
-//
-//        }
-    }
+    private void ywqPaper(List<Paper> jsonPapers) {
+        List<Paper> jsonPapersL = JSONObject.parseArray(JSONObject.toJSONString(jsonPapers), Paper.class);
+        PaperKeyword paperKeyword = new PaperKeyword();
+        for (Paper jsonPaper : jsonPapersL) {
+            // 如果每次保存，都用jsonPaper保存可以吗？单独修改下keyword只要数据能对上就行
+            String keywords = jsonPaper.getKeywords();
+            String[] split = keywords.split(",");
 
-//    private void ywqPaper(List<Paper> jsonPapers) {
-//        List<Paper> jsonPapersL = JSONObject.parseArray(JSONObject.toJSONString(jsonPapers), Paper.class);
-//        PaperKeyword paperKeyword = new PaperKeyword();
-//        for (Paper jsonPaper : jsonPapersL) {
-//            // 如果每次保存，都用jsonPaper保存可以吗？单独修改下keyword只要数据能对上就行
-//            String keywords = jsonPaper.getKeywords();
-//            String[] split = keywords.split(",");
-//
-//            List<KeywordJson> list = new ArrayList<>();
-//            for (String s : split) {
-//                KeywordJson k = new KeywordJson();
-//                s = s.replace("[", StringUtils.EMPTY);
-//                s = s.replace("]", StringUtils.EMPTY);
-//                s = s.replace("\"", StringUtils.EMPTY);
-//                k.setKeyword(s);
-//                list.add(k);
-//            }
-//
-//            String json = JSONObject.toJSONString(list);
-//            jsonPaper.setKeywords(json);
-//            jsonPaper.setAchievementId(generateUUID());
-//            String achievementId = jsonPaper.getAchievementId();
-//            String strkeywords = jsonPaper.getKeywords();
-//            String chineseTitle = jsonPaper.getChineseTitle();
-//            paperKeyword.setPaperId(achievementId);
-//            paperKeyword.setKeyword(strkeywords);
-//            paperKeyword.setKeywordsId(generateUUID());
-//            paperKeyword.setChineseTitle(chineseTitle);
-//            paperKeywordsRepository.save(paperKeyword);
-//        }
-//    }
+            List<KeywordJson> list = new ArrayList<>();
+            for (String s : split) {
+                KeywordJson k = new KeywordJson();
+                s = s.replace("[", StringUtils.EMPTY);
+                s = s.replace("]", StringUtils.EMPTY);
+                s = s.replace("\"", StringUtils.EMPTY);
+                k.setKeyword(s);
+                list.add(k);
+            }
+
+            String json = JSONObject.toJSONString(list);
+            jsonPaper.setKeywords(json);
+            jsonPaper.setAchievementId(generateUUID());
+            String achievementId = jsonPaper.getAchievementId();
+            String strkeywords = jsonPaper.getKeywords();
+            String chineseTitle = jsonPaper.getChineseTitle();
+            paperKeyword.setPaperId(achievementId);
+            paperKeyword.setKeyword(strkeywords);
+            paperKeyword.setKeywordsId(generateUUID());
+            paperKeyword.setChineseTitle(chineseTitle);
+            paperKeywordsRepository.save(paperKeyword);
+        }
+    }
 
 
     private void dealPaper(List<Paper> jsonPapers) {
         List<List<Paper>> existPapers = new ArrayList<>();
 
         for (Paper item : jsonPapers) {
-//            List<Paper> searchPapers = paperRepository.findAllByChineseTitle(item.getChineseTitle());
-//            if (searchPapers.size() > 0) {
-//                existPapers.add(searchPapers);
-//                continue;
-//            }
+            List<Paper> searchPapers = paperRepository.findAllByChineseTitle(item.getChineseTitle());
+            if (searchPapers.size() > 0) {
+                existPapers.add(searchPapers);
+                continue;
+            }
             // 没有的数据，直接添加
             insertPaper(item);
         }
 
         // ====得到论文ids====
-//        List<String> existPaperIds = new ArrayList<>();
-//        for (List<Paper> existPaper : existPapers) {
-//            for (Paper paper : existPaper) {
-//                existPaperIds.add(paper.getAchievementId());
-//            }
-//        }
-//        // 得到PaperAuthor表所有的作者
-//        List<PaperAuthor> paperAuthors = paperAuthorRepository.findAllByPaperIdIn(existPaperIds);
-//
-//        List<String> personIds = new ArrayList<>();
-//        for (PaperAuthor paperAuthor : paperAuthors) {
-//            personIds.add(paperAuthor.getPersonId());
-//        }
-//
-//        List<String> dealPersonName = new ArrayList<>(Arrays.asList("谭铁牛", "怀进鹏"));
-//        // 将数组转化成list对象
-//        // List<String> dealPersonName = new ArrayList<>(Arrays.asList("谭铁牛"));
-//        for (String person : dealPersonName) {
-//            // stream().filter 按条件对集合进行过滤
-//            // Collectors.toList() 将查询出来的对象转化成list
-//            List<PaperAuthor> target = paperAuthors.stream().filter(s -> s.getPersonName().equals(person)).collect(Collectors.toList());
-//            String personId = target.get(0).getPersonId();
-//
-//            for (Paper paper : jsonPapers) {
-//                String authors = paper.getAuthors();
-//                if (StringUtils.isEmpty(authors)) {
-//                    continue;
-//                }
-//                if (paper.getAuthors().contains(person)) {
-//                    if (personIds.contains(personId)) {
-//                        // 已经存在了
-//                        updatePaper(paper);
-//                    } else {
-//                        insertPaper(paper);
-//                        // 不存在，插入一条论文，把你为论文生成的uuid保存方便中间表添加记录
-//                    }
-//                }
-//            }
-//        }
+        List<String> existPaperIds = new ArrayList<>();
+        for (List<Paper> existPaper : existPapers) {
+            for (Paper paper : existPaper) {
+                existPaperIds.add(paper.getAchievementId());
+            }
+        }
+        // 得到PaperAuthor表所有的作者
+        List<PaperAuthor> paperAuthors = paperAuthorRepository.findAllByPaperIdIn(existPaperIds);
+
+        List<String> personIds = new ArrayList<>();
+        for (PaperAuthor paperAuthor : paperAuthors) {
+            personIds.add(paperAuthor.getPersonId());
+        }
+
+        List<String> dealPersonName = new ArrayList<>(Arrays.asList("谭铁牛", "怀进鹏"));
+        // 将数组转化成list对象
+        // List<String> dealPersonName = new ArrayList<>(Arrays.asList("谭铁牛"));
+        for (String person : dealPersonName) {
+            // stream().filter 按条件对集合进行过滤
+            // Collectors.toList() 将查询出来的对象转化成list
+            List<PaperAuthor> target = paperAuthors.stream().filter(s -> s.getPersonName().equals(person)).collect(Collectors.toList());
+            String personId = target.get(0).getPersonId();
+
+            for (Paper paper : jsonPapers) {
+                String authors = paper.getAuthors();
+                if (StringUtils.isEmpty(authors)) {
+                    continue;
+                }
+                if (paper.getAuthors().contains(person)) {
+                    if (personIds.contains(personId)) {
+                        // 已经存在了
+                        updatePaper(paper);
+                    } else {
+                        insertPaper(paper);
+                        // 不存在，插入一条论文，把你为论文生成的uuid保存方便中间表添加记录
+                    }
+                }
+            }
+        }
         // ====论文end====
     }
 
@@ -251,53 +240,53 @@ public class PaperController extends BaseController {
         }
     }
 
-    //    private void dealRefs(List<Paper> jsonPapers) {
-//        List<String> paperidsList = new ArrayList<>();
-//        String refs = null;
-//        for (Paper jsonPaper : jsonPapers) {
-//            // 引文
-//            refs = jsonPaper.getRefer();
-//            if (!StringUtils.isEmpty(refs) && !refs.equals("[]")) {
-//                List<PaperRef> paperRefs = JSONObject.parseArray(refs, PaperRef.class);
-//                for (PaperRef paperRef : paperRefs) {
-//                    String name = paperRef.getName();
-//                    String achievementIds = paperRepository.findByChineseTitle(name).getAchievementId();
-//                    if (!StringUtils.isEmpty(achievementIds)){
-//                        paperidsList.add(achievementIds);
-//                        List<PaperAuthor> allByPaperIdIn = paperAuthorRepository.findAllByPaperIdIn(paperidsList);
-//                        if (allByPaperIdIn == null || allByPaperIdIn.size() < 0) {
-//                            insertPaperRefer(paperRef);
-//                        }
-//                    }
-//                }
-//            }
-//        }
-//        int stop = 0;
-//    }
+    private void dealRefs(List<Paper> jsonPapers) {
+        List<String> paperidsList = new ArrayList<>();
+        String refs = null;
+        for (Paper jsonPaper : jsonPapers) {
+            // 引文
+            refs = jsonPaper.getRefer();
+            if (!StringUtils.isEmpty(refs) && !refs.equals("[]")) {
+                List<PaperRef> paperRefs = JSONObject.parseArray(refs, PaperRef.class);
+                for (PaperRef paperRef : paperRefs) {
+                    String name = paperRef.getName();
+                    String achievementIds = paperRepository.findByChineseTitle(name).getAchievementId();
+                    if (!StringUtils.isEmpty(achievementIds)) {
+                        paperidsList.add(achievementIds);
+                        List<PaperAuthor> allByPaperIdIn = paperAuthorRepository.findAllByPaperIdIn(paperidsList);
+                        if (allByPaperIdIn == null || allByPaperIdIn.size() < 0) {
+                            insertPaperRefer(paperRef);
+                        }
+                    }
+                }
+            }
+        }
+        int stop = 0;
+    }
 
     public void in(List<Paper> jsonPapers) {
         // 读取原json文件 然后保存关键词，论文标题，关键词UUID,论文标题UUID
-//        Keyword entityKeyword = new Keyword();
-//
-//        for (Paper jsonPaper : jsonPapers) {
-//            String keywords = jsonPaper.getKeywords();
-//            String[] split = keywords.split(",");
-//
-//            List<KeywordJson> list = new ArrayList<>();
-//            for (String s : split) {
-//                KeywordJson k = new KeywordJson();
-//                s = s.replace("[", StringUtils.EMPTY);
-//                s = s.replace("]", StringUtils.EMPTY);
-//                s = s.replace("\"", StringUtils.EMPTY);
-//                k.setKeyword(s);
-//                list.add(k);
-//            }
-//            String json = JSONObject.toJSONString(list);
-//
-//            entityKeyword.setKeyword(json);
-//            entityKeyword.setKeywordsId(generateUUID());
-//            keywordsRepository.save(entityKeyword);
-//        }
+        Keyword entityKeyword = new Keyword();
+
+        for (Paper jsonPaper : jsonPapers) {
+            String keywords = jsonPaper.getKeywords();
+            String[] split = keywords.split(",");
+
+            List<KeywordJson> list = new ArrayList<>();
+            for (String s : split) {
+                KeywordJson k = new KeywordJson();
+                s = s.replace("[", StringUtils.EMPTY);
+                s = s.replace("]", StringUtils.EMPTY);
+                s = s.replace("\"", StringUtils.EMPTY);
+                k.setKeyword(s);
+                list.add(k);
+            }
+            String json = JSONObject.toJSONString(list);
+
+            entityKeyword.setKeyword(json);
+            entityKeyword.setKeywordsId(generateUUID());
+            keywordsRepository.save(entityKeyword);
+        }
     }
 
     private void dealKeyword(List<Paper> jsonPapers) {
