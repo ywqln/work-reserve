@@ -75,10 +75,6 @@ public class DictionaryController extends BaseController {
         }
     }
 
-    protected String generateUUID() {
-        return UUID.randomUUID().toString().replaceAll("-", StringUtils.EMPTY);
-    }
-
     @Override
     public void workFlow() {
         dictionaryDispose();
