@@ -4,9 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.GenericGenerator;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 /**
  * @Title: $
@@ -23,6 +21,7 @@ import javax.persistence.Table;
 public class Dictionary {
     @Id
     @GenericGenerator(name = "id", strategy = "uuid")
+//    @GeneratedValue(strategy = GenerationType.AUTO)
     private String id;
     private String code;
     private String name;
