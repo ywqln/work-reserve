@@ -1,17 +1,15 @@
 package com.qln.workreserve.controller;
 
+import com.alibaba.fastjson.JSONObject;
 import com.qln.workreserve.dbo.DicNode;
 import com.qln.workreserve.dbo.Dictionary;
 import com.qln.workreserve.repository.DicNodeRepository;
 import com.qln.workreserve.repository.DictionaryRepository;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
-import java.util.UUID;
+import java.util.stream.Collectors;
 
 /**
  * @Title: $
@@ -39,14 +37,15 @@ public class DictionaryController extends BaseController {
         //              相同   存库 得到父级id，然后存款
         //              不相同  继续切割
 
-        Pageable pageable = PageRequest.of(10, 10);
+//        Pageable pageable = PageRequest.of(10, 10);
 //        Page<DicNode> dicNodes = dicNodeRepository.findAll(pageable);
         List<DicNode> dicNodes = dicNodeRepository.findAll();
 
         Dictionary dictionary = new Dictionary();
         for (DicNode dicNode : dicNodes) {
-            String name = dicNode.getName();
-            String code = dicNode.getCode();
+            DicNode oDicNode = JSONObject.parseObject(JSONObject.toJSONString(dicNode), DicNode.class);
+            String name = oDicNode.getName();
+            String code = oDicNode.getCode();
             int length = code.length();
             System.out.println(length);
             // 1.code的长度=1就是根节点，然后root为1，生成uuid
@@ -56,24 +55,57 @@ public class DictionaryController extends BaseController {
                 dictionary.setCode(code);
                 dictionary.setName(name);
                 dictionary.setParentId(generateUUID());
-            } else if (code.length() >= 2) {
+            } else {
+                String name1 = dictionary.getName();
                 if (!name.equals(dictionary.getName())) {
-                    code = code.substring(0, 1);
+                    code = code.substring(0, code.length() - 1);
+                    code = code.replace(".", "");
+                    code = code.replace("+", "");
+                    code = code.replace("-", "");
                     if (code.equals(dictionary.getCode())) {
-                        dictionary.setId(dictionary.getId());
+                        dictionary.setId(generateUUID());
                         dictionary.setRoot(false);
-                        dictionary.setCode(code);
+                        dictionary.setCode(dictionary.getCode());
                         dictionary.setName(name);
                         dictionary.setParentId(dictionary.getId());
+                        continue;
                     }
-                } else {
-
                 }
             }
-
             dictionaryRepository.save(dictionary);
         }
     }
+
+
+    private int length = 1;
+
+    private void ywq() {
+        List<DicNode> dicNodes = dicNodeRepository.findAll();
+//        String json = JSONObject.toJSONString(dicNodes);
+        // A23.2.2 A23.2.2.5
+        // A23 A23.2 A23.2.2
+        // A23 A23/2 A23/2/2
+        // [A] [A23] [A23/2] [A23/2/5]
+
+        List<DicNode> node;
+        length = 1;
+        // 查询长度
+        while (dicNodes.stream().filter(q -> q.getCode().length() == length).collect(Collectors.toList()).size() > 0) {
+            node = dicNodes.stream().filter(q -> q.getCode().length() == length).collect(Collectors.toList());
+            for (DicNode dicNode : node) {
+                String parentCode = dicNode.getCode();
+                List<DicNode> childs = dicNodes.stream().filter(q -> q.getCode().startsWith(parentCode)).collect(Collectors.toList());
+
+                String[] symblo = new String[]{".", "-", "/"};
+                for (String s : symblo) {
+                    childs.removeIf(q -> q.getCode().replace(parentCode,"").indexOf(s) != q.getCode().replace(parentCode,"").lastIndexOf(s));
+                }
+            }
+        }
+
+        length++;
+    }
+
 
     @Override
     public void workFlow() {
