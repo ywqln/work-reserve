@@ -70,4 +70,14 @@ public abstract class BaseController {
             return null;
         }
     }
+
+    protected void writeFile(String path, String content) {
+        try {
+            BufferedWriter out = new BufferedWriter(new FileWriter(path));
+            out.write(content);
+            out.close();
+            System.out.println("文件创建成功！");
+        } catch (IOException e) {
+        }
+    }
 }
