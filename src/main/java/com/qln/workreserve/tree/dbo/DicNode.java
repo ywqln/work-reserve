@@ -4,6 +4,9 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 
 /**
  * 描述：字典节点
@@ -16,9 +19,11 @@ import javax.persistence.Entity;
 @Getter
 @Entity
 public class DicNode {
-//    @GenericGenerator(name = "paymentableGenerator", strategy = "uuid")
+    //    @GenericGenerator(name = "paymentableGenerator", strategy = "uuid")
     // 主键唯一
-    private String id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Integer id;
     // code：A11
     private String code;
     // 名称：马克思不读了
