@@ -8,6 +8,7 @@ import com.qln.workreserve.repository.DictionaryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -79,36 +80,76 @@ public class DictionaryController extends BaseController {
 
     private int length = 1;
 
-    private void ywq() {
+    public void qln() {
         List<DicNode> dicNodes = dicNodeRepository.findAll();
-//        String json = JSONObject.toJSONString(dicNodes);
-        // A23.2.2 A23.2.2.5
-        // A23 A23.2 A23.2.2
-        // A23 A23/2 A23/2/2
-        // [A] [A23] [A23/2] [A23/2/5]
-
         List<DicNode> node;
         length = 1;
         // 查询长度
         while (dicNodes.stream().filter(q -> q.getCode().length() == length).collect(Collectors.toList()).size() > 0) {
             node = dicNodes.stream().filter(q -> q.getCode().length() == length).collect(Collectors.toList());
+
             for (DicNode dicNode : node) {
                 String parentCode = dicNode.getCode();
+                // 所以父类下的子类菜单
                 List<DicNode> childs = dicNodes.stream().filter(q -> q.getCode().startsWith(parentCode)).collect(Collectors.toList());
-
-                String[] symblo = new String[]{".", "-", "/"};
+                String[] symblo = new String[]{".", "-", "/", "+"};
                 for (String s : symblo) {
-                    childs.removeIf(q -> q.getCode().replace(parentCode,"").indexOf(s) != q.getCode().replace(parentCode,"").lastIndexOf(s));
+                    childs.removeIf(q -> q.getCode().replace(parentCode, "").indexOf(s) != q.getCode().replace(parentCode, "").lastIndexOf(s));
+                    getChildParentId(node, childs);
                 }
             }
         }
-
         length++;
+    }
+
+    private void getChildParentId(List<DicNode> node, List<DicNode> childs) {
+        Dictionary dictionary = new Dictionary();
+        List<Dictionary> dictionaryList = new ArrayList<>();
+        for (DicNode dicNode : node) {
+            for (DicNode child : childs) {
+                if (dicNode.getCode().equals(child.getCode())) {
+                    dictionary.setId(generateUUID());
+                    dictionary.setCode(child.getCode());
+                    dictionary.setName(child.getName());
+                    dictionary.setParentId(generateUUID());
+                    dictionary.setRoot(true);
+                    dictionaryList.add(dictionary);
+                    dictionaryRepository.save(dictionary);
+                } else {
+                    for (Dictionary dictionary1 : dictionaryList) {
+                        dictionary.setId(generateUUID());
+                        dictionary.setCode(child.getCode());
+                        dictionary.setName(child.getName());
+                        dictionary.setParentId(dictionary1.getId());
+                        dictionary.setRoot(false);
+                        dictionaryRepository.save(dictionary);
+                    }
+                }
+            }
+        }
     }
 
 
     @Override
     public void workFlow() {
-        dictionaryDispose();
+//        dictionaryDispose();
+//        saveNode2Txt();
+//        qln();
+        DicNode dicNode = new DicNode();
+        List<DicNode> nodeList = new ArrayList<>();
+        List<DicNode> nodeList2 = new ArrayList<>();
+        nodeList.add(dicNode);
+        nodeList2.add(dicNode);
+        System.out.println(nodeList);
+        System.out.println(nodeList2);
+    }
+
+    /**
+     * 写入TXT文件
+     */
+    private void saveNode2Txt() {
+        List<DicNode> dicNodes = dicNodeRepository.findAll();
+        String json = JSONObject.toJSONString(dicNodes);
+        writeFile("C:\\json/dicJson.txt", json);
     }
 }
