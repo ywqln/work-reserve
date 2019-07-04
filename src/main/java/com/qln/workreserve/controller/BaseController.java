@@ -80,4 +80,16 @@ public abstract class BaseController {
         } catch (IOException e) {
         }
     }
+
+    public <T> T copyObject(T data, Class<T> clazz) {
+        String json = JSONObject.toJSONString(data);
+        T t = JSONObject.parseObject(json, clazz);
+        return t;
+    }
+
+    public <T> List<T> copyList(List<T> data, Class<T> clazz) {
+        String json = JSONObject.toJSONString(data);
+        List<T> t = JSONObject.parseArray(json, clazz);
+        return t;
+    }
 }
