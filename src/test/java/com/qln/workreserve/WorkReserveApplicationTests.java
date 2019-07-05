@@ -1,6 +1,7 @@
 package com.qln.workreserve;
 
 import com.qln.workreserve.controller.AddHJPTableController;
+import com.qln.workreserve.controller.DicController;
 import com.qln.workreserve.controller.DictionaryController;
 import com.qln.workreserve.controller.YwqController;
 import org.junit.Test;
@@ -19,9 +20,11 @@ public class WorkReserveApplicationTests {
 	private DictionaryController dictionaryController;
 	@Autowired
 	private YwqController ywqController;
+	@Autowired
+	private DicController dicController;
 
 	@Test
 	public void contextLoads() {
-		ywqController.workFlow();
+		dicController.workFlow();
 	}
 }

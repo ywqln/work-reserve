@@ -1,13 +1,5 @@
 package com.qln.workreserve.tree.dbo;
 
-import lombok.Getter;
-import lombok.Setter;
-
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-
 /**
  * 描述：字典节点
  * </p>
@@ -15,14 +7,14 @@ import javax.persistence.Id;
  * @author QinLiNa
  * @data 2019/7/2
  */
-@Setter
-@Getter
-@Entity
+//@Setter
+//@Getter
+//@Entity
 public class DicNode {
     //    @GenericGenerator(name = "paymentableGenerator", strategy = "uuid")
     // 主键唯一
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+//    @Id
+//    @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
     // code：A11
     private String code;
