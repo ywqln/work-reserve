@@ -31,7 +31,8 @@ public class DicController extends YwqController {
 
     @Override
     public void workFlow() {
-        treeNode();
+        method2();
+//        treeNode();
 //        test();
     }
 
@@ -91,4 +92,14 @@ public class DicController extends YwqController {
         System.out.println("报告大王！树结构节点数据已经保存到数据库！耗时：" + ((end - start) / 1000) + "秒");
     }
 
+    @Override
+    protected void method2() {
+        List<DicNode> qlnSql = dicNodeRepository.findAll();
+        // 将两列的对象数组浅拷贝为YwqDicNode数组
+        List<YwqDicNode> dataSource = copyList(qlnSql, YwqDicNode.class);
+        for (YwqDicNode ywqDicNode : dataSource) {
+            ywqDicNode.setDicId(generateUUID());
+        }
+        findParents(dataSource);
+    }
 }

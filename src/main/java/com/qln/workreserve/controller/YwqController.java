@@ -1,9 +1,11 @@
 package com.qln.workreserve.controller;
 
 import com.alibaba.fastjson.JSONObject;
+import com.qln.workreserve.dbo.Dictionary;
 import com.qln.workreserve.dbo.YwqDicNode;
 import com.qln.workreserve.dbo.YwqDictionary;
 import com.qln.workreserve.repository.YwqDicNodeRepository;
+import com.qln.workreserve.repository.YwqDictionaryRepository;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -24,11 +26,80 @@ import java.util.stream.Collectors;
 public class YwqController extends BaseController {
     @Autowired
     private YwqDicNodeRepository ywqDicNodeRepository;
+    @Autowired
+    private YwqDictionaryRepository ywqDictionaryRepository;
 
     @Override
     public void workFlow() {
-        treeNode();
+        method2();
     }
+
+    protected void method2() {
+        List<YwqDicNode> dataSource = ywqDicNodeRepository.findAll();
+        findParents(dataSource);
+    }
+
+    protected void findParents(List<YwqDicNode> dataSource) {
+        int noParentCount = 0;
+        for (YwqDicNode ywqDicNode : dataSource) {
+            String code = ywqDicNode.getCode();
+            int length = code.length();
+            // 如果code长度是1，必然是根节点，设置根节点属性，并跳出本次循环。
+            if (length == 1) {
+                // 这些就是祖宗了
+                ywqDicNode.setRoot(true);
+                ywqDicNode.setParentId("none");
+                continue;
+            }
+
+            String subCode = code;
+            boolean find = false;
+            while (subCode.length() > 1 && !find) {
+                // 从后面砍掉一个
+                subCode = removeLast(subCode);
+                // 再砍掉一个
+                // 单独处理长得有点畸形的子孙
+                if (subCode.endsWith(".") || subCode.endsWith("-") || subCode.endsWith("/")) {
+                    subCode = removeLast(subCode);
+                }
+                String finalSubCode = subCode;
+                List<YwqDicNode> parents = dataSource.stream().filter(q -> q.getCode().equals(finalSubCode)).collect(Collectors.toList());
+                if (parents.size() > 0) {
+                    // 给父子节点挂关系（儿子找爸爸 / 小蝌蚪找爸爸）
+                    YwqDicNode parentNode = parents.get(0);
+                    ywqDicNode.setParentId(parentNode.getDicId());
+                    ywqDicNode.setRoot(false);
+
+                    if (parents.size() > 1) {
+                        // 他们的长辈关系应该是很乱，道德缺失啊...
+                        System.out.println(code + "查询到" + parents.size() + "个父节点，我们选择第一个");
+                    }
+                    find = true;
+                }
+            }
+
+            if (find) {
+                continue;
+            }
+
+            // 找到最后都没有找到父节点
+            // 这些就是石头缝里蹦出来的小孩儿，没有爹，野孩子啊 waif
+            System.out.println(code + "没有查询到父节点");
+            ywqDicNode.setParentId("waif");
+            // 统计下野孩子的数量
+            noParentCount++;
+        }
+
+        List<YwqDictionary> result = copyList(dataSource, YwqDictionary.class);
+        ywqDictionaryRepository.saveAll(result);
+
+        System.out.println("报告大王！族谱统计完毕！其中有" + noParentCount + "个野孩子！");
+    }
+
+    private String removeLast(String value) {
+        return value.substring(0, value.length() - 1);
+    }
+
 
     private void treeNode() {
         // A23.2.2 A23.2.2.5
@@ -54,6 +125,8 @@ public class YwqController extends BaseController {
                 // 得到当前节点的code
                 String parentId = ywqDictionary.getDicId();
                 String parentCode = ywqDictionary.getCode();
+
+                System.out.println("现在统计了" + ywqDictionaries.size() + "条数据");
 
                 // 找到所有的子节点
                 List<YwqDictionary> childes = findChildes(dataSource, parentCode);
