@@ -1,7 +1,6 @@
 package com.qln.workreserve.controller;
 
 import com.alibaba.fastjson.JSONObject;
-import com.qln.workreserve.dbo.Dictionary;
 import com.qln.workreserve.dbo.YwqDicNode;
 import com.qln.workreserve.dbo.YwqDictionary;
 import com.qln.workreserve.repository.YwqDicNodeRepository;
@@ -41,7 +40,10 @@ public class YwqController extends BaseController {
 
     protected void findParents(List<YwqDicNode> dataSource) {
         int noParentCount = 0;
+        int index = 0;
         for (YwqDicNode ywqDicNode : dataSource) {
+            index++;
+            System.out.println("给第" + index + "个节点查找父节点");
             String code = ywqDicNode.getCode();
             int length = code.length();
             // 如果code长度是1，必然是根节点，设置根节点属性，并跳出本次循环。

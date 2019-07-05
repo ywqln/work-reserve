@@ -17,9 +17,8 @@ import javax.persistence.*;
 @Setter
 @Table(name = "dictionary_result")
 public class YwqDictionary {
+//    @GeneratedValue(strategy = GenerationType.AUTO)
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Integer id;
     private String dicId;
     private String code;
     private String name;

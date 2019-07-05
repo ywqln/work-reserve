@@ -18,7 +18,7 @@ import javax.persistence.*;
 @Table(name = "dictionary")
 public class YwqDicNode {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+//    @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
     private String dicId;
     private String code;

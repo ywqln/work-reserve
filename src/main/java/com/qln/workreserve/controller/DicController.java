@@ -1,16 +1,13 @@
 package com.qln.workreserve.controller;
 
-import com.alibaba.fastjson.JSONObject;
 import com.qln.workreserve.dbo.DicNode;
 import com.qln.workreserve.dbo.YwqDicNode;
 import com.qln.workreserve.dbo.YwqDictionary;
 import com.qln.workreserve.repository.DicNodeRepository;
 import com.qln.workreserve.repository.YwqDictionaryRepository;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -94,12 +91,15 @@ public class DicController extends YwqController {
 
     @Override
     protected void method2() {
+        System.out.println("开始执行");
         List<DicNode> qlnSql = dicNodeRepository.findAll();
+        System.out.println("查出所有");
         // 将两列的对象数组浅拷贝为YwqDicNode数组
         List<YwqDicNode> dataSource = copyList(qlnSql, YwqDicNode.class);
         for (YwqDicNode ywqDicNode : dataSource) {
             ywqDicNode.setDicId(generateUUID());
         }
+        System.out.println("追加dicId完毕");
         findParents(dataSource);
     }
 }
