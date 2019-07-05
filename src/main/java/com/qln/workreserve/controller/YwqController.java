@@ -45,7 +45,7 @@ public class YwqController extends BaseController {
 
     }
 
-    private void tree(List<YwqDicNode> dataSource, List<YwqDictionary> ywqDictionaries) {
+    protected void tree(List<YwqDicNode> dataSource, List<YwqDictionary> ywqDictionaries) {
         List<YwqDictionary> loopDic = copyList(ywqDictionaries, YwqDictionary.class);
         List<YwqDictionary> temp = new ArrayList<>();
 
@@ -113,7 +113,7 @@ public class YwqController extends BaseController {
     }
 
     // 找出所有的根节点，并设置字段
-    private List<YwqDictionary> selectRoot(List<YwqDicNode> dataSource) {
+    protected List<YwqDictionary> selectRoot(List<YwqDicNode> dataSource) {
         List<YwqDictionary> ywqDictionaries = new ArrayList<>();
         // 先获取到根节点List 比如：A、B、C、[U]
         /**
