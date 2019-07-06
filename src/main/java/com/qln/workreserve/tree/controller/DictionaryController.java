@@ -1,7 +1,7 @@
 package com.qln.workreserve.tree.controller;
 
 import com.alibaba.fastjson.JSONObject;
-import com.qln.workreserve.controller.BaseController;
+import com.qln.workreserve.common.controller.BaseController;
 import com.qln.workreserve.tree.dbo.DicNode;
 import com.qln.workreserve.tree.dbo.Dictionary;
 import com.qln.workreserve.tree.repository.DicNodeRepository;

@@ -1,6 +1,6 @@
 package com.qln.workreserve;
 
-import com.qln.workreserve.controller.AddHJPTableController;
+import com.qln.workreserve.paper.controller.AddHJPTableController;
 import com.qln.workreserve.tree.controller.DicController;
 import com.qln.workreserve.tree.controller.DictionaryController;
 import com.qln.workreserve.tree.controller.YwqController;
