@@ -3,7 +3,6 @@ package com.qln.workreserve.controller;
 import com.alibaba.fastjson.JSONObject;
 import com.qln.workreserve.dbo.Paper;
 import org.apache.commons.lang3.StringUtils;
-import sun.security.util.Resources;
 
 import java.io.*;
 import java.util.List;
@@ -32,9 +31,6 @@ public abstract class BaseController {
     }
 
     protected List<Paper> readJson2Paper() {
-        Resources resources = new Resources();
-        Object[][] contents = resources.getContents();
-
         String json = readJsonFile(jsonPath);
         List<Paper> papers = JSONObject.parseArray(json, Paper.class);
         return papers;
