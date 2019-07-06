@@ -1,10 +1,10 @@
-package com.qln.workreserve.controller;
+package com.qln.workreserve.tree.controller;
 
-import com.qln.workreserve.dbo.DicNode;
-import com.qln.workreserve.dbo.YwqDicNode;
-import com.qln.workreserve.dbo.YwqDictionary;
-import com.qln.workreserve.repository.DicNodeRepository;
-import com.qln.workreserve.repository.YwqDictionaryRepository;
+import com.qln.workreserve.tree.dbo.DicNode;
+import com.qln.workreserve.tree.dbo.YwqDicNode;
+import com.qln.workreserve.tree.dbo.YwqDictionary;
+import com.qln.workreserve.tree.repository.DicNodeRepository;
+import com.qln.workreserve.tree.repository.YwqDictionaryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 

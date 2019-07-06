@@ -1,10 +1,11 @@
-package com.qln.workreserve.controller;
+package com.qln.workreserve.tree.controller;
 
 import com.alibaba.fastjson.JSONObject;
-import com.qln.workreserve.dbo.DicNode;
-import com.qln.workreserve.dbo.Dictionary;
-import com.qln.workreserve.repository.DicNodeRepository;
-import com.qln.workreserve.repository.DictionaryRepository;
+import com.qln.workreserve.controller.BaseController;
+import com.qln.workreserve.tree.dbo.DicNode;
+import com.qln.workreserve.tree.dbo.Dictionary;
+import com.qln.workreserve.tree.repository.DicNodeRepository;
+import com.qln.workreserve.tree.repository.DictionaryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 

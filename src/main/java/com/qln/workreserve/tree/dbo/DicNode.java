@@ -1,27 +1,26 @@
 package com.qln.workreserve.tree.dbo;
 
+import lombok.Getter;
+import lombok.Setter;
+
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
 /**
- * 描述：字典节点
- * </p>
- *
- * @author QinLiNa
- * @data 2019/7/2
- */
-//@Setter
-//@Getter
-//@Entity
+ * @Title: $
+ * @Project: csai-api
+ * @Description: TODO
+ * @Author 秦莉娜
+ * @Date 2019/7/3$ 12:47$
+ * @Version V2.0
+ **/
+@Getter
+@Setter
+@Entity
+@Table(name = "dictionary_clc_category")
 public class DicNode {
-    //    @GenericGenerator(name = "paymentableGenerator", strategy = "uuid")
-    // 主键唯一
-//    @Id
-//    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Integer id;
-    // code：A11
+    @Id
     private String code;
-    // 名称：马克思不读了
     private String name;
-    // 父节点的Id
-    private String parentId;
-    // 当前节点是不是根节点
-    private boolean root;
 }

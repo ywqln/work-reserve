@@ -1,4 +1,4 @@
-package com.qln.workreserve.dbo;
+package com.qln.workreserve.tree.dbo;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -15,11 +15,10 @@ import javax.persistence.*;
 @Entity
 @Getter
 @Setter
-@Table(name = "dictionary")
-public class YwqDicNode {
-    @Id
+@Table(name = "dictionary_result")
+public class YwqDictionary {
 //    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Integer id;
+    @Id
     private String dicId;
     private String code;
     private String name;

@@ -1,4 +1,4 @@
-package com.qln.workreserve.dbo;
+package com.qln.workreserve.tree.dbo;
 
 import lombok.Getter;
 import lombok.Setter;

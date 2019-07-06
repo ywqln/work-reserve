@@ -1,9 +1,9 @@
 package com.qln.workreserve;
 
 import com.qln.workreserve.controller.AddHJPTableController;
-import com.qln.workreserve.controller.DicController;
-import com.qln.workreserve.controller.DictionaryController;
-import com.qln.workreserve.controller.YwqController;
+import com.qln.workreserve.tree.controller.DicController;
+import com.qln.workreserve.tree.controller.DictionaryController;
+import com.qln.workreserve.tree.controller.YwqController;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;

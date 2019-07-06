@@ -1,6 +1,6 @@
-package com.qln.workreserve.repository;
+package com.qln.workreserve.tree.repository;
 
-import com.qln.workreserve.dbo.DicNode;
+import com.qln.workreserve.tree.dbo.DicNode;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 /**
