@@ -15,7 +15,7 @@ import javax.persistence.*;
 @Entity
 @Getter
 @Setter
-@Table(name = "hjp_paper_field")
+//@Table(name = "hjp_paper_field")
 public class Field {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
